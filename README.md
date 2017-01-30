@@ -18,8 +18,9 @@ Finally (if it wasn't obvious), **MonoJunkie** is for Windows only. I may eventu
 # Caveats
 1. MonoJunkie must be the same architecture as the target process. If the process is 64-bit, we must also be 64-bit. This is due to some issue with Blackbone crossing the WOW64 barrier.
 2. The Assembly you are injecting must match the architecture of the target process (or Any CPU).
-3. The Method MonoJunkie is calling must be static and publicly visible. MonoJunkie does not instantiate the class the method is a member of. See [the example](ExampleAssembly/Example.cs).
-4. The correct time to inject depends on what you are injecting into. Injecting too early may cause issues and crashes. In unity games; for instance, you would usually want to wait until the Main menu has completely loaded before injecting.
+3. The Assembly you are injecting must be using the same version of .NET the target process is. Failure to do so may lead to problems. For example, all Unity games you should use .NET Framework 3.5, and compile against the assemblies shipped with the game (including System.dll, mscorlib.dll!) Due to legal reasons, my example assembly does not do this because I would have to ship a game's DLLs with it!
+4. The Method MonoJunkie is calling must be static and publicly visible. MonoJunkie does not instantiate the class the method is a member of. See [the example](ExampleAssembly/Example.cs).
+5. The correct time to inject depends on what you are injecting into. Injecting too early may cause issues and crashes. In unity games; for instance, you would usually want to wait until the Main menu has completely loaded before injecting.
 
 # TODO
 1. Generalize all calls in MonoInternals using a template, as it is messy boilerplate.
