@@ -5,6 +5,9 @@
 
 Finally (if it wasn't obvious), **MonoJunkie** is for Windows only. I may eventually port it to Linux, but there are better ways to do this on Linux than using this tool.
 
+# Disclaimer
+**DO NOT** use MonoJunkie with online games. Don't blame me if you get banned!
+
 # Instructions
 1. Follow the [caveats](#caveats) to ensure everything will work correctly in your assembly.
 2. Start the process. Wait until the correct injection time (again, see [caveats](#caveats)).
