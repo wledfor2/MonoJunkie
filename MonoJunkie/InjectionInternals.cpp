@@ -7,7 +7,7 @@
 #include "../Blackbone/src/BlackBone/Process/Threads/Thread.h"
 #include "../Blackbone/src/BlackBone/Asm/AsmVariant.hpp"
 
-MonoInternals::MonoInternals(blackbone::Process& targetProcess) {
+MonoInternals::MonoInternals(blackbone::Process& targetProcess, const std::wstring& targetDLLFilename) {
 
 	//initialize member variables to default values
 	cachedDomain = nullptr;
@@ -20,7 +20,7 @@ MonoInternals::MonoInternals(blackbone::Process& targetProcess) {
 	rpc_mono_runtime_invoke = nullptr;
 
 	//Acquire Mono HMODULE from remote process
-	const blackbone::ModuleData* module = targetProcess.modules().GetModule(_T("mono.dll"));
+	const blackbone::ModuleData* module = targetProcess.modules().GetModule(targetDLLFilename);
 
 	//check if Mono.dll was found, GetModule returns nullptr on failure
 	if (module != nullptr) {
@@ -70,7 +70,7 @@ MonoInternals::MonoInternals(blackbone::Process& targetProcess) {
 	} else {
 
 		//Can't find Mono.dll, unable to continue!
-		throw MonoInternalsException(_T("Unable to find mono.dll in remote process."));
+		throw MonoInternalsException(_T("Unable to find target DLL \"") + targetDLLFilename + _T("\" in remote process."));
 
 	}
 

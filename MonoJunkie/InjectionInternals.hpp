@@ -85,7 +85,7 @@ private:
 public:
 
 	//Initialize and cleanup RPCs for the given process.
-	MonoInternals(blackbone::Process& targetProcess);
+	MonoInternals(blackbone::Process& targetProcess, const std::wstring& targetDLLFilename);
 	~MonoInternals();
 
 	//Returns the root MonoDomain (the AppDomain the process starts with).

@@ -13,7 +13,9 @@ Finally (if it wasn't obvious), **MonoJunkie** is for Windows only. I may eventu
 2. Start the process. Wait until the correct injection time (again, see [caveats](#caveats)).
 3. Inject your assembly via the command line. For instance, for our example assembly: 
 
->MonoJunkie.exe -dll "ExampleAssembly.dll" -namespace ExampleAssembly -class Example -method OnLoad -exe targetexe.exe
+>MonoJunkie.exe -dll "ExampleAssembly.dll" -namespace ExampleAssembly -class Example -method OnLoad -exe targetexe.exe -mdll mono.dll
+
+-mdll is optional, and allows you to specify the filename for the Mono DLL loaded in the target process.
 
 # Caveats
 1. MonoJunkie must be the same architecture as the target process. If the process is 64-bit, we must also be 64-bit. This is due to some issue with Blackbone crossing the WOW64 barrier.

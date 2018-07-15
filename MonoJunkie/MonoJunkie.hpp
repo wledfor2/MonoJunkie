@@ -6,7 +6,7 @@
 #include <tchar.h>
 #include "Exceptions.hpp"
 
-#define COMMAND_LINE_USAGE _T("MonoJunkie -dll <dll name> -namespace <namespace name> -class <class name> -method <method name> -exe <exe name>")
+#define COMMAND_LINE_USAGE _T("MonoJunkie -dll <dll name> -namespace <namespace name> -class <class name> -method <method name> -exe <exe name> [-mdll <mono dll name>]")
 
 //We wrap all strings in this class for two reasons:
 //First, Mono expects UTF-8 narrow character strings (UTF-8 const char*).
@@ -120,6 +120,16 @@ struct Configuration {
 	//path/filename to the DLL we are injecting
 	ConfigurationString assemblyPath;
 	ConfigurationString assemblyFileName;
+
+	//path/filename of the Mono DLL in the target process
+	ConfigurationString monoDLLFileName;
+
+	//set optional configuration parameters
+	Configuration() {
+
+		monoDLLFileName = _T("mono.dll");
+
+	}
 
 	//true if an error occurred during parsing. If true, only hadError and errorString is guaranteed to be valid. Everything else is undefined.
 	bool hadError = false;

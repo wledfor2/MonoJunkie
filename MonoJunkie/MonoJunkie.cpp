@@ -15,6 +15,7 @@ void InjectAssembly(Configuration& configuration) {
 
 	//output injection configuration
 	std::wcout << _T("Attempting to inject ") << configuration.assemblyFileName << _T(" into ") << configuration.targetProcessEXE << _T("...") << std::endl;
+	std::wcout << _T("Mono DLL: ") << configuration.monoDLLFileName << std::endl;
 
 	//vector of found process IDs matching the given exeName
 	std::vector<DWORD> foundPIDs;
@@ -46,8 +47,8 @@ void InjectAssembly(Configuration& configuration) {
 			//check if process is pure 32-bit or pure 64-bit (NOTE: Cleaner than GetWow64Barrier().sourceWow64 && GetWow64Barrier().targetWow64)
 			if (processBarrierType != blackbone::wow_32_64 && processBarrierType != blackbone::wow_64_32) {
 
-				//Create mono internals class which handles acqui ring all RPCs
-				MonoInternals internals(targetProcess);
+				//Create mono internals class which handles acquiring all RPCs
+				MonoInternals internals(targetProcess, configuration.monoDLLFileName);
 
 				//Retrieve root app domain
 				MonoDomain* domain = internals.mono_get_root_domain();
@@ -83,7 +84,7 @@ void InjectAssembly(Configuration& configuration) {
 				internals.mono_runtime_invoke(targetMethod, nullptr, nullptr, nullptr);
 
 				//Done! output injection success
-				std::wcout << _T("Injection complete. Called ") << configuration.targetNamespace << _T("::") << configuration.targetClass << _T(".") << configuration.targetMethod << _T("().");
+				std::wcout << _T("Injection complete. Called ") << configuration.targetNamespace << _T("::") << configuration.targetClass << _T(".") << configuration.targetMethod << _T("().") << std::endl;
 
 			} else {
 
@@ -233,6 +234,25 @@ Configuration ParseCommandLine(int argc, wchar_t** argv) {
 
 						//Unable to get the exe filename. Tell the user why.
 						parsedConfiguration.onError(_T("Unable to get EXE filename for the given EXE \"") + argument + _T("\":") + GetLastErrorString());
+
+					}
+
+				} else if (optionName == _T("mdll")) {
+
+					//we only want the Mono DLL filename, not the full path.
+					std::wstring dllName = GetFileName(argument);
+
+					//check if we could retrieve the DLL filename from the given argument (GetFileName returns an empty string on error).
+					if (!dllName.empty()) {
+
+						//filename of the Mono DLL
+						parsedConfiguration.monoDLLFileName = dllName;
+
+					}
+					else {
+
+						//Unable to get the DLL's filename from the given path. Tell the user why.
+						parsedConfiguration.onError(_T("Unable to get DLL filename for the given DLL \"") + argument + _T("\":") + GetLastErrorString());
 
 					}
 
